@@ -6,9 +6,9 @@ const bookAuthor = document.getElementById('author');
 const buttonClass = document.querySelector('.buttonClass');
 const books = [];
 
-const saveBooks = newBooks => {
+const saveBooks = (newBooks) => {
   localStorage.setItem('books', JSON.stringify(newBooks));
-}
+};
 
 const addItem = (title, author) => {
   const reloadBooks = JSON.parse(localStorage.getItem('books'));
@@ -38,7 +38,7 @@ const addItem = (title, author) => {
       });
     });
   } else { saveBooks(books); }
-}
+};
 
 buttonClass.addEventListener('click', () => {
   addItem(bookTitle, bookAuthor);
