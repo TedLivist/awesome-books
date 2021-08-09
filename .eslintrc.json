@@ -15,5 +15,8 @@
     "no-param-reassign": "off",
     "eol-last": "off"
   },
-  "ignorePatterns": ["dist/", "build/"]
+  "ignorePatterns": [
+    "dist/",
+    "build/"
+  ]
 }
