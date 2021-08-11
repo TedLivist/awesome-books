@@ -13,9 +13,10 @@ Tasks to do:
 
 ## Built With
 
-- HTML
-- CSS
-- JS
+- HTML5
+- CSS3
+- JavaScript
+- Bootstrap 4
 
 ## Authors
 

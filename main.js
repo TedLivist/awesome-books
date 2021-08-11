@@ -34,21 +34,25 @@ class UtilizeBook {
   static displayBooks() {
     const reloadBooks = UtilizeBook.findBooks() || [];
     list.innerHTML = '';
-    reloadBooks.forEach((reloadedBook) => {
-      const book = document.createElement('li');
+    reloadBooks.forEach((abook) => {
+      const book = document.createElement('tr');
+      const btnContainer = document.createElement('td');
       const deleteBtn = document.createElement('button');
       deleteBtn.innerText = 'Remove';
-      book.innerHTML = `<p>${reloadedBook.title}</p>
-        <p>${reloadedBook.author} </p>`;
-      deleteBtn.id = reloadedBook.title;
-      deleteBtn.className = 'removeBtn';
-      const br = document.createElement('br');
+      book.innerHTML = `
+          <td class="p-3" ><span class="font-weight-bold text-capitalize">"${abook.title}" </span> by <span class="text-capitalize">  ${abook.author}</span></td
+      `;
+      book.appendChild(btnContainer);
+      deleteBtn.id = abook.title;
+      deleteBtn.className = 'btn btn-danger';
+      btnContainer.className = 'd-flex justify-content-end';
       list.appendChild(book);
-      book.appendChild(deleteBtn);
-      list.appendChild(br);
+      btnContainer.appendChild(deleteBtn);
       deleteBtn.addEventListener('click', () => {
-        if (deleteBtn.id === reloadedBook.title) {
-          const index = reloadBooks.findIndex((rBook) => rBook.title === deleteBtn.id);
+        if (deleteBtn.id === abook.title) {
+          const index = reloadBooks.findIndex(
+            (rBook) => rBook.title === deleteBtn.id,
+          );
           reloadBooks.splice(index, 1);
           list.removeChild(book);
           localStorage.setItem('books', JSON.stringify(reloadBooks));
@@ -65,17 +69,19 @@ addButton.addEventListener('click', () => {
   const books = UtilizeBook.findBooks();
   if (books.length === 0) {
     const abook = UtilizeBook.createBook();
-    const book = document.createElement('li');
+    const book = document.createElement('tr');
+    const btnContainer = document.createElement('td');
     const deleteBtn = document.createElement('button');
     deleteBtn.innerText = 'Remove';
-    book.innerHTML = `<p>${abook.title}</p>
-        <p>${abook.author} </p>`;
+    book.innerHTML = `
+          <td class="p-3" ><span class="font-weight-bold text-capitalize">"${abook.title}" </span> by <span class="text-capitalize">  ${abook.author}</span></td
+      `;
+    book.appendChild(btnContainer);
     deleteBtn.id = abook.title;
-    deleteBtn.className = 'removeBtn';
-    const br = document.createElement('br');
+    deleteBtn.className = 'btn btn-dark';
+    btnContainer.className = 'd-flex justify-content-end';
     list.appendChild(book);
-    book.appendChild(deleteBtn);
-    list.appendChild(br);
+    btnContainer.appendChild(deleteBtn);
     deleteBtn.addEventListener('click', () => {
       if (deleteBtn.id === abook.title) {
         const index = books.findIndex((rBook) => rBook.title === deleteBtn.id);
