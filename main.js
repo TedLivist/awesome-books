@@ -61,4 +61,14 @@ addButton.addEventListener('click', () => {
   UseBook.saveBook(newBook);
   UseBook.displayBooks();
   const books = UseBook.findBooks();
+  if (books.length === 0) {
+    const abook = UseBook.createBook();
+    const book = document.createElement('li');
+    const deleteBtn = document.createElement('button');
+    deleteBtn.innerText = 'Remove';
+    book.innerHTML = `<p>${abook.title}</p>
+        <p>${abook.author} </p>`;
+    deleteBtn.id = abook.title;
+    deleteBtn.className = 'removeBtn';
+  }
 }
