@@ -44,7 +44,7 @@ class UtilizeBook {
       `;
       book.appendChild(btnContainer);
       deleteBtn.id = abook.title;
-      deleteBtn.className = 'btn btn-dark';
+      deleteBtn.className = 'btn btn-danger';
       btnContainer.className = 'd-flex justify-content-end';
       list.appendChild(book);
       btnContainer.appendChild(deleteBtn);
