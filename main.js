@@ -12,7 +12,7 @@ class Book {
   }
 }
 
-class UseBook {
+class UtilizeBook {
   static createBook() {
     return new Book(bookTitle.value, bookAuthor.value);
   }
@@ -32,22 +32,22 @@ class UseBook {
   }
 
   static displayBooks() {
-    const reloadBooks = UseBook.findBooks() || [];
+    const reloadBooks = UtilizeBook.findBooks() || [];
     list.innerHTML = '';
-    reloadBooks.forEach((abook) => {
+    reloadBooks.forEach((reloadedBook) => {
       const book = document.createElement('li');
       const deleteBtn = document.createElement('button');
       deleteBtn.innerText = 'Remove';
-      book.innerHTML = `<p>${abook.title}</p>
-        <p>${abook.author} </p>`;
-      deleteBtn.id = abook.title;
+      book.innerHTML = `<p>${reloadedBook.title}</p>
+        <p>${reloadedBook.author} </p>`;
+      deleteBtn.id = reloadedBook.title;
       deleteBtn.className = 'removeBtn';
       const br = document.createElement('br');
       list.appendChild(book);
       book.appendChild(deleteBtn);
       list.appendChild(br);
       deleteBtn.addEventListener('click', () => {
-        if (deleteBtn.id === abook.title) {
+        if (deleteBtn.id === reloadedBook.title) {
           const index = reloadBooks.findIndex((rBook) => rBook.title === deleteBtn.id);
           reloadBooks.splice(index, 1);
           list.removeChild(book);
@@ -59,12 +59,12 @@ class UseBook {
 }
 
 addButton.addEventListener('click', () => {
-  const newBook = UseBook.createBook();
-  UseBook.saveBook(newBook);
-  UseBook.displayBooks();
-  const books = UseBook.findBooks();
+  const newBook = UtilizeBook.createBook();
+  UtilizeBook.saveBook(newBook);
+  UtilizeBook.displayBooks();
+  const books = UtilizeBook.findBooks();
   if (books.length === 0) {
-    const abook = UseBook.createBook();
+    const abook = UtilizeBook.createBook();
     const book = document.createElement('li');
     const deleteBtn = document.createElement('button');
     deleteBtn.innerText = 'Remove';
@@ -84,10 +84,10 @@ addButton.addEventListener('click', () => {
         localStorage.setItem('books', JSON.stringify(books));
       }
     });
-    UseBook.saveBook(abook);
+    UtilizeBook.saveBook(abook);
   }
 });
 
 window.onload = () => {
-  UseBook.displayBooks();
+  UtilizeBook.displayBooks();
 };
