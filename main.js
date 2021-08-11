@@ -55,3 +55,10 @@ class UseBook {
     });
   }
 }
+
+addButton.addEventListener('click', () => {
+  const newBook = UseBook.createBook();
+  UseBook.saveBook(newBook);
+  UseBook.displayBooks();
+  const books = UseBook.findBooks();
+}
