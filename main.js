@@ -85,3 +85,7 @@ addButton.addEventListener('click', () => {
     UseBook.saveBook(abook);
   }
 });
+
+window.onload = () => {
+  UseBook.displayBooks();
+};
