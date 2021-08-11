@@ -1,3 +1,5 @@
+/* eslint-disable linebreak-style, max-classes-per-file */
+
 const list = document.getElementById('list');
 const bookTitle = document.getElementById('title');
 const bookAuthor = document.getElementById('author');
