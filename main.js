@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-loop-func */
 /* eslint-disable max-classes-per-file */
 const list = document.getElementById('list');
@@ -60,7 +61,7 @@ class UtilizeBook {
         }
       }
       if (newBook.title !== '') {
-        books.push(newBook);
+        books.unshift(newBook);
       }
       localStorage.setItem('books', JSON.stringify(books)); //
     }
@@ -72,7 +73,7 @@ class UtilizeBook {
 
   static displayBooks(currentPage) {
     const bookFound = UtilizeBook.findBooks() || [];
-    const reloadBooks = UtilizeBook.paginate(currentPage, 6, bookFound);
+    const reloadBooks = UtilizeBook.paginate(currentPage, 4, bookFound);
     list.innerHTML = '';
     reloadBooks.forEach((abook) => {
       const book = document.createElement('tr');
@@ -84,7 +85,7 @@ class UtilizeBook {
       `;
       book.appendChild(btnContainer);
       deleteBtn.id = abook.title;
-      deleteBtn.className = 'btn btn-dark';
+      deleteBtn.className = 'btn btn-danger';
       btnContainer.className = 'd-flex justify-content-end';
       list.appendChild(book);
       btnContainer.appendChild(deleteBtn);
@@ -175,9 +176,9 @@ function getNumberSuffix(num) {
   }
 }
 
-/* eslint-disable */
+/* eslint-disable no-undef */
 const { DateTime } = luxon;
-/* eslint-enable */
+
 setInterval(() => {
   const today = DateTime.local();
   const modified = today
