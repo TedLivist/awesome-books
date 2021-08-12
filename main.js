@@ -1,9 +1,10 @@
-/* eslint-disable linebreak-style, max-classes-per-file */
-
+/* eslint-disable no-loop-func */
+/* eslint-disable max-classes-per-file */
 const list = document.getElementById('list');
 const bookTitle = document.getElementById('title');
 const bookAuthor = document.getElementById('author');
 const addButton = document.querySelector('.buttonClass');
+let current = 1;
 
 class Book {
   constructor(title, author) {
@@ -13,6 +14,36 @@ class Book {
 }
 
 class UtilizeBook {
+  static pages(pages) {
+    const paginationUl = document.querySelector('.css-pagination');
+    paginationUl.innerHTML = '';
+    for (let i = 1; i <= pages; i += 1) {
+      const paginationLi = document.createElement('li');
+      paginationLi.className = 'p-item rounded-circle text-center d-flex justify-content-center';
+      paginationLi.id = i;
+      if (current === paginationLi.id) {
+        paginationLi.classList.add('bg-dark');
+        paginationLi.classList.add('p-active');
+      } else {
+        paginationLi.classList.remove('active');
+      }
+      paginationLi.addEventListener('click', () => {
+        current = paginationLi.id;
+        UtilizeBook.displayBooks(current);
+      });
+      paginationLi.innerHTML = `<a class='p-link' href='#'>${i}
+    </a>`;
+      paginationUl.appendChild(paginationLi);
+    }
+  }
+
+  static paginate(currentPage = 1, rows, array) {
+    currentPage -= 1;
+    const loopStart = rows * currentPage;
+    const paginatedItems = array.slice(loopStart, loopStart + rows);
+    return paginatedItems;
+  }
+
   static createBook() {
     return new Book(bookTitle.value, bookAuthor.value);
   }
@@ -22,7 +53,15 @@ class UtilizeBook {
     if (books === null) {
       localStorage.setItem('books', JSON.stringify([]));
     } else {
-      books.push(newBook);
+      const searchBooks = UtilizeBook.findBooks();
+      for (let i = 0; i < searchBooks.length; i += 1) {
+        if (newBook.title === searchBooks[i].title) {
+          return;
+        }
+      }
+      if (newBook.title !== '') {
+        books.push(newBook);
+      }
       localStorage.setItem('books', JSON.stringify(books)); //
     }
   }
@@ -31,8 +70,9 @@ class UtilizeBook {
     return JSON.parse(localStorage.getItem('books'));
   }
 
-  static displayBooks() {
-    const reloadBooks = UtilizeBook.findBooks() || [];
+  static displayBooks(currentPage) {
+    const bookFound = UtilizeBook.findBooks() || [];
+    const reloadBooks = UtilizeBook.paginate(currentPage, 6, bookFound);
     list.innerHTML = '';
     reloadBooks.forEach((abook) => {
       const book = document.createElement('tr');
@@ -44,25 +84,41 @@ class UtilizeBook {
       `;
       book.appendChild(btnContainer);
       deleteBtn.id = abook.title;
-      deleteBtn.className = 'btn btn-danger';
+      deleteBtn.className = 'btn btn-dark';
       btnContainer.className = 'd-flex justify-content-end';
       list.appendChild(book);
       btnContainer.appendChild(deleteBtn);
       deleteBtn.addEventListener('click', () => {
         if (deleteBtn.id === abook.title) {
-          const index = reloadBooks.findIndex(
-            (rBook) => rBook.title === deleteBtn.id,
-          );
-          reloadBooks.splice(index, 1);
-          list.removeChild(book);
-          localStorage.setItem('books', JSON.stringify(reloadBooks));
+          const index = bookFound.findIndex((rBook) => rBook.title === deleteBtn.id);
+          bookFound.splice(index, 1);
+          localStorage.setItem('books', JSON.stringify(bookFound));
+          UtilizeBook.displayBooks(current);
         }
       });
     });
+    const paginationSize = Math.ceil(bookFound.length / 6);
+    UtilizeBook.pages(paginationSize);
   }
 }
 
+const newAdd = document.querySelector('.openNew');
+const contactInfo = document.getElementsByClassName('contact')[0];
+const bookList = document.getElementsByClassName('listBook')[0];
+const inputs = document.querySelector('.inputs');
+const openList = document.querySelector('.openList');
+const openContact = document.querySelector('.openContact');
+
+const menu = document.querySelector('.humburger');
+const nav = document.querySelector('.navigation');
+const cancelMenu = document.querySelector('.cancel-btn');
+
 addButton.addEventListener('click', () => {
+  contactInfo.classList.add('d-none');
+  contactInfo.classList.remove('d-flex');
+  bookList.classList.remove('d-none');
+  inputs.classList.add('d-none');
+  inputs.classList.remove('d-flex');
   const newBook = UtilizeBook.createBook();
   UtilizeBook.saveBook(newBook);
   UtilizeBook.displayBooks();
@@ -92,6 +148,8 @@ addButton.addEventListener('click', () => {
     });
     UtilizeBook.saveBook(abook);
   }
+  bookTitle.value = '';
+  bookAuthor.value = '';
 });
 
 window.onload = () => {
@@ -130,3 +188,86 @@ setInterval(() => {
   modified[modified.length - 1] = modified[modified.length - 1].toLowerCase();
   timeNow.innerHTML = modified.join(' ');
 }, 1000);
+
+newAdd.addEventListener('click', () => {
+  contactInfo.classList.add('d-none');
+  bookList.classList.add('d-none');
+  inputs.classList.remove('d-none');
+  inputs.classList.add('d-flex');
+  contactInfo.classList.remove('d-flex');
+
+  nav.classList.add('navigation-Anim');
+  setTimeout(() => {
+    nav.classList.remove('navigation-Anim');
+    nav.classList.remove('mob-navigation');
+    nav.classList.add('navigation');
+    contactInfo.classList.remove('flue');
+    inputs.classList.remove('flue');
+    bookList.classList.remove('flue');
+    timeNow.parentElement.classList.remove('flue');
+  }, 400);
+});
+
+openContact.addEventListener('click', () => {
+  contactInfo.classList.remove('d-none');
+  contactInfo.classList.add('d-flex');
+  bookList.classList.add('d-none');
+  inputs.classList.add('d-none');
+  inputs.classList.remove('d-flex');
+
+  nav.classList.add('navigation-Anim');
+  setTimeout(() => {
+    nav.classList.remove('navigation-Anim');
+    nav.classList.remove('mob-navigation');
+    nav.classList.add('navigation');
+    contactInfo.classList.remove('flue');
+    inputs.classList.remove('flue');
+    bookList.classList.remove('flue');
+    timeNow.parentElement.classList.remove('flue');
+  }, 400);
+});
+
+openList.addEventListener('click', () => {
+  contactInfo.classList.add('d-none');
+  contactInfo.classList.remove('d-flex');
+  bookList.classList.remove('d-none');
+  inputs.classList.add('d-none');
+  inputs.classList.remove('d-flex');
+
+  nav.classList.add('navigation-Anim');
+  setTimeout(() => {
+    nav.classList.remove('navigation-Anim');
+    nav.classList.remove('mob-navigation');
+    nav.classList.add('navigation');
+    contactInfo.classList.remove('flue');
+    inputs.classList.remove('flue');
+    bookList.classList.remove('flue');
+    timeNow.parentElement.classList.remove('flue');
+  }, 400);
+});
+
+menu.addEventListener('click', () => {
+  nav.classList.add('mob-navigation-anim');
+  nav.classList.remove('navigation');
+  contactInfo.classList.add('flue');
+  inputs.classList.add('flue');
+  bookList.classList.add('flue');
+  timeNow.parentElement.classList.add('flue');
+  setTimeout(() => {
+    nav.classList.remove('mob-navigation-anim');
+    nav.classList.add('mob-navigation');
+  }, 10);
+});
+
+cancelMenu.addEventListener('click', () => {
+  nav.classList.add('navigation-Anim');
+  setTimeout(() => {
+    nav.classList.remove('navigation-Anim');
+    nav.classList.remove('mob-navigation');
+    nav.classList.add('navigation');
+    contactInfo.classList.remove('flue');
+    inputs.classList.remove('flue');
+    bookList.classList.remove('flue');
+    timeNow.parentElement.classList.remove('flue');
+  }, 400);
+});
